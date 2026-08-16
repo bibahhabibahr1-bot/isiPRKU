@@ -1,0 +1,48 @@
+name: Build isiPR APK
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout kode
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Java (dibutuhkan Gradle)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install dependency Node
+        run: npm install
+
+      - name: Tambah platform Android
+        run: npx cap add android
+
+      - name: Sinkronkan web app ke Android
+        run: npx cap sync android
+
+      - name: Izinkan gradlew dieksekusi
+        run: chmod +x android/gradlew
+
+      - name: Build APK debug (belum untuk Play Store, untuk dicoba dulu di HP)
+        run: cd android && ./gradlew assembleDebug
+
+      - name: Upload APK sebagai hasil build
+        uses: actions/upload-artifact@v4
+        with:
+          name: isiPR-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
