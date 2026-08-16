@@ -1,0 +1,12 @@
+{
+  "appId": "com.isipr.app",
+  "appName": "isiPR",
+  "webDir": "www",
+  "backgroundColor": "#232733",
+  "android": {
+    "allowMixedContent": false
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}
